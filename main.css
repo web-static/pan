@@ -74,6 +74,9 @@
     display: block;
 }
 
+.file_view {
+    margin-top: 50px;
+}
 
 .file_item {
     height: 100px;
