@@ -1,87 +1,188 @@
 <!DOCTYPE html>
 <html>
-        <head>
-            <title>我的网盘</title>
-            <script>
-                const endpoint = "mibook.ddns.iisjy.cn/nas"
-                let nowPath="";
-                function init(){
-                    nowPath = new URL(window.location.href).searchParams.get('path');
-                    if(nowPath==null){
-                        nowPath="/";
-                        history.pushState(null,nowPath,`index.html?path=${encodeURIComponent(nowPath)}`)
-                    }
-                    load_files();
-                }
-                
-                function open_dir(self){
-                    nowPath+=self;
-                    nowPath+="/";
-                    history.pushState(null,nowPath,`index.html?path=${encodeURIComponent(nowPath)}`)
-                    load_files();
-                }
-                function play_video(filename){
-                    window.location.href = "player.html?source="+encodeURIComponent(`https://${endpoint}${nowPath}${filename}`);
-                }
-                function download_file(){
 
-                }
-                function is_video(thistype){
-                    const video_type = ["mp4","mkv","webm","avi"]
-                    for(let i=0;i in video_type;i++){
-                        if(thistype==video_type[i])
-                            return true;
-                    }
-                    return false;
-                }
-                function getAction(self){
-                    const filetype= self.type;
-                    if(filetype == "directory") return "open_dir(this.id)";
-                    else if(is_video(self.name.split(".").pop())) return "play_video(this.id)";
-                    else return "download_file()";
-                }
-                function getSize(self){
-                    const filesize = self.size;
-                    if (self.type == "directory") return "[文件夹]"
-                    else if (filesize<1024) return `[${parseInt(filesize)} Byte]`;
-                    else if(filesize < 1024*1024) return `[${parseInt(filesize/1024)} KB]`;
-                    else if(filesize < 1024*1024*1024) return `[${parseInt(filesize/1024/1024)} MB]`
-                    else return `[${parseInt(filesize/1024/1024/1024)} GB]`
-                }
-                function load_files(){
-                    fetch(`https://${endpoint}${nowPath}`,{mode: 'no-cors'})
-                    .then(resp=>resp.json())
-                    .then(files=>{
-                        console.log(files)
-                        let ml_str = "";
-                        files.forEach(elem => {
-                            ml_str+=`<div class="file_item" id="${elem.name}" onclick="${getAction(elem)}"><img height="100px" class="file_icon" src="icon/dir.png"><div class="file_name">${getSize(elem)}${elem.name}</div></div>`;
-                            console.log(elem)
-                        });
-                        document.getElementById("file_view").innerHTML=ml_str;
-                    })
-                }
-            </script>
-            <style>
-                .file_item{
-                    height: 100px;
-                    /* float: inline-start; */
-                }
-                .file_name{
-                    display: inline;
-                    vertical-align: middle;
-                    position: absolute;
-                    line-height: 100px;
-                    height: 100px;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="file_view" id="file_view">
-                
-            </div>
-            <script>
-                init();
-            </script>
-        </body>
+<head>
+    <title>我的网盘</title>
+    <script>
+        const endpoint = "mibook.ddns.iisjy.cn/nas"
+        let nowPath = "";
+        function init() {
+            nowPath = new URL(window.location.href).searchParams.get('path');
+            if (nowPath == null) {
+                nowPath = "/";
+                history.pushState(null, nowPath, `index.html?path=${encodeURIComponent(nowPath)}`)
+            }
+            load_files();
+        }
+
+        function open_dir(self) {
+            nowPath += self;
+            nowPath += "/";
+            history.pushState(null, nowPath, `index.html?path=${encodeURIComponent(nowPath)}`)
+            load_files();
+        }
+        function play_video(filename) {
+            window.location.href = "player.html?source=" + encodeURIComponent(`https://${endpoint}${nowPath}${filename}`);
+        }
+        function download_file() {
+
+        }
+        function is_video(thistype) {
+            const video_type = ["mp4", "mkv", "webm", "avi"]
+            for (let i = 0; i in video_type; i++) {
+                if (thistype == video_type[i])
+                    return true;
+            }
+            return false;
+        }
+        function getAction(self) {
+            const filetype = self.type;
+            if (filetype == "directory") return "open_dir(this.id)";
+            else if (is_video(self.name.split(".").pop())) return "play_video(this.id)";
+            else return "download_file()";
+        }
+        function getSize(self) {
+            const filesize = self.size;
+            if (self.type == "directory") return "[文件夹]"
+            else if (filesize < 1024) return `[${parseInt(filesize)} Byte]`;
+            else if (filesize < 1024 * 1024) return `[${parseInt(filesize / 1024)} KB]`;
+            else if (filesize < 1024 * 1024 * 1024) return `[${parseInt(filesize / 1024 / 1024)} MB]`
+            else return `[${parseInt(filesize / 1024 / 1024 / 1024)} GB]`
+        }
+        function load_files() {
+            fetch(`https://${endpoint}${nowPath}`, { mode: 'cors' })
+                .then(resp => resp.json())
+                .then(files => {
+                    console.log(files)
+                    let ml_str = "";
+                    files.forEach(elem => {
+                        ml_str += `<div class="file_item" id="${elem.name}" onclick="${getAction(elem)}"><img height="100px" class="file_icon" src="icon/dir.png"><div class="file_name">${getSize(elem)}${elem.name}</div></div>`;
+                        console.log(elem)
+                    });
+                    document.getElementById("file_view").innerHTML = ml_str;
+                })
+        }
+    </script>
+    <style type="text/css">
+        .top {
+            /* 设置宽度高度背景颜色 */
+            height: auto;
+            /*高度改为自动高度*/
+            width: 100%;
+            margin-left: 0;
+            background: rgb(189, 181, 181);
+            position: fixed;
+            /*固定在顶部*/
+            top: 0;
+            /*离顶部的距离为0*/
+            margin-bottom: 5px;
+        }
+
+        .top ul {
+            /* 清除ul标签的默认样式 */
+            width: auto;
+            /*宽度也改为自动*/
+            list-style-type: none;
+            white-space: nowrap;
+            overflow: hidden;
+            margin-left: 5%;
+            /* margin-top: 0;          */
+            padding: 0;
+
+        }
+
+        .top li {
+            float: left;
+            /* 使li内容横向浮动，即横向排列  */
+            margin-right: 2%;
+            /* 两个li之间的距离*/
+            position: relative;
+            overflow: hidden;
+        }
+
+        .top li a {
+            /* 设置链接内容显示的格式*/
+            display: block;
+            /* 把链接显示为块元素可使整个链接区域可点击 */
+            color: white;
+            text-align: center;
+            padding: 3px;
+            overflow: hidden;
+            text-decoration: none;
+            /* 去除下划线 */
+
+        }
+
+        .top li a:hover {
+            /* 鼠标选中时背景变为黑色 */
+            background-color: #111;
+        }
+
+        .top ul li ul {
+            /* 设置二级菜单 */
+            margin-left: -0.2px;
+            background: rgb(189, 181, 181);
+            position: relative;
+            display: none;
+            /* 默认隐藏二级菜单的内容 */
+
+        }
+
+        .top ul li ul li {
+            /* 二级菜单li内容的显示 */
+
+            float: none;
+            text-align: center;
+        }
+
+        .top ul li:hover ul {
+            /* 鼠标选中二级菜单内容时 */
+            display: block;
+        }
+
+
+        .file_item {
+            height: 100px;
+            /* float: inline-start; */
+        }
+
+        .file_name {
+            display: inline;
+            vertical-align: middle;
+            position: absolute;
+            line-height: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top">
+        <!-- <center>  -->
+         <ul>
+         <li><a href="#"><b>主目录</b></a></li>
+         <li><a href="#">一级菜单</a></li>
+         <li><a href="#">一级菜单</a></li>
+         <li><a href="#">一级菜单</a></li>
+         <li><a href="#">一级菜单</a></li>
+         <li>
+             <a href="#">一级菜单</a>
+             <ul>
+                 <li><a href="#">二级菜单</a></li>
+                 <li><a href="#">二级菜单</a></li>
+             </ul>
+         </li>        
+           </ul>
+         <!-- </center>       -->
+ </div>
+
+
+    <div class="file_view" id="file_view">
+
+    </div>
+    <script>
+        init();
+    </script>
+</body>
+
 </html>
