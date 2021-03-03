@@ -37,10 +37,10 @@
         document.getElementById("pot").href = `potplayer://${video_source}`;
         document.getElementById("vlc").href = `vlc://${video_source}`
 
-        if (is265(video_source.toLowerCase())) {
-            alert("不支持h265")
+        // if (is265(video_source.toLowerCase())) {
+        //     alert("不支持h265")
 
-        } else {
+        // } else {
 
             const player = new Aliplayer({
                 "id": "player-con",
@@ -60,6 +60,6 @@
                 console.log("The player is created");
             }
             );
-        }
+        // }
     </script>
 </body>
