@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+    <title>播放视频</title>
+    <!-- <script src="//cdn.jsdelivr.net/npm/xgplayer@2.18.2/browser/index.js" type="text/javascript"></script> -->
+    <script>
+        const video_source = new URL(window.location.href).searchParams.get('source');
+        if (video_source == null) {
+            window.location.href = "index.html"
+        }
+        function is265(txt) {
+
+        }          
+    </script>
+    <link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/2.9.3/skins/default/aliplayer-min.css" />
+    <script type="text/javascript" charset="utf-8" src="https://g.alicdn.com/de/prismplayer/2.9.3/aliplayer-min.js"></script>
+</head>
+
+<body>
+
+    <div class="prism-player" id="player-con"></div>
+
+    <div>
+        <span>如果不能正常播放，请复制视频URL到本地播放器</span>
+        <input type="text" id="video_path">
+        <a id="pot"><button>使用 PotPlayer 播放(PC)</button></a>
+        <a id="vlc"><button>使用 VLC 播放</button></a>
+    </div>
+    <script>
+        document.getElementById("video_path").value = video_source;
+        document.getElementById("pot").href = `potplayer://${video_source}`;
+        document.getElementById("vlc").href = `vlc://${video_source}`
+
+        if (/[h265]|[x265]|[hevc]/.test(video_source.toLowerCase())) {
+            alert("不支持h265")
+
+        } else {
+
+            const player = new Aliplayer({
+                "id": "player-con",
+                "source": video_source,
+                "width": "100%",
+                "height": `${parseInt(document.body.clientWidth * 9 / 16)}px`,
+                //   "height": "100%",
+                "autoplay": true,
+                "isLive": false,
+                "rePlay": false,
+                "playsinline": true,
+                "preload": true,
+                "language": "zh-cn",
+                "controlBarVisibility": "hover",
+                "useH5Prism": true
+            }, function (player) {
+                console.log("The player is created");
+            }
+            );
+        }
+    </script>
+</body>
