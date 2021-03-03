@@ -12,7 +12,10 @@
             window.location.href = "index.html"
         }
         function is265(txt) {
-
+            if(/[h265]/.test(txt)) return true;
+            if(/[x265]/.test(txt)) return true;
+            if(/[hevc]/.test(txt)) return true;
+            return false;
         }          
     </script>
     <link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/2.9.3/skins/default/aliplayer-min.css" />
@@ -34,7 +37,7 @@
         document.getElementById("pot").href = `potplayer://${video_source}`;
         document.getElementById("vlc").href = `vlc://${video_source}`
 
-        if (/[h265]|[x265]|[hevc]/.test(video_source.toLowerCase())) {
+        if (is265(video_source.toLowerCase())) {
             alert("不支持h265")
 
         } else {
