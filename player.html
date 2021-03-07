@@ -30,7 +30,7 @@
         <span>如果不能正常播放，请复制视频URL到本地播放器</span>
         <input type="text" id="video_path">
         <a id="pot"><button>使用 PotPlayer 播放(PC)</button></a>
-        <a id="kmp"><button>使用 KMPlayer 播放</button></a>
+        <!-- <a id="kmp"><button>使用 KMPlayer 播放</button></a> -->
         <a id="vlc"><button>使用 VLC 播放</button></a>
         <a id="dl" download target="_blank"><button>下载该文件</button></a>
     </div>
@@ -38,7 +38,7 @@
         document.getElementById("video_path").value = video_source;
         document.getElementById("pot").href = `potplayer://${video_source}`;
         document.getElementById("vlc").href = `vlc://${video_source}`;
-        document.getElementById("kmp").href = `kmplayer://${video_source}`;
+        // document.getElementById("kmp").href = `kmplayer://${video_source}`;
         document.getElementById("dl").href = video_source;
 
         // if (is265(video_source.toLowerCase())) {
